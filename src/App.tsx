@@ -9,6 +9,9 @@ const Home = lazy(() => import('./pages/Home.tsx'))
 const FlowersGallery = lazy(() => import('./pages/FlowersGallery.tsx'))
 const AverageProducts = lazy(() => import('./pages/AverageProducts.tsx'))
 const PremiumProducts = lazy(() => import('./pages/PremiumProducts.tsx'))
+const Checkout = lazy(() => import('./pages/Checkout.tsx'))
+const CheckoutSuccess = lazy(() => import('./pages/CheckoutSuccess.tsx'))
+const Contact = lazy(() => import('./pages/Contact.tsx'))
 const NotFound = lazy(() => import('./pages/NotFound.tsx'))
 
 
@@ -33,6 +36,9 @@ function App() {
                     <Route path="/flowers" element={<FlowersGallery />} />
                     <Route path="/average-products" element={<AverageProducts />} />
                     <Route path="/premium-products" element={<PremiumProducts />} />
+                    <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/checkout-success" element={<CheckoutSuccess />} />
+                    <Route path="/contact" element={<Contact />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </Suspense>

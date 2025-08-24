@@ -1,0 +1,116 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Suspense, lazy } from 'react'
+import { HelmetProvider } from 'react-helmet-async'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import Header from './components/layout/Header.tsx'
+import Footer from './components/layout/Footer.tsx'
+import ErrorBoundary from './components/ErrorBoundary'
+import { CartProvider } from './contexts/CartContext'
+import { CartDropdown } from './components/cart/CartDropdown'
+
+// Public Pages
+const Home = lazy(() => import('./pages/Home.tsx'))
+const FlowersGallery = lazy(() => import('./pages/FlowersGallery.tsx'))
+const AverageProducts = lazy(() => import('./pages/AverageProducts.tsx'))
+const PremiumProducts = lazy(() => import('./pages/PremiumProducts.tsx'))
+const Checkout = lazy(() => import('./pages/Checkout.tsx'))
+const CheckoutSuccess = lazy(() => import('./pages/CheckoutSuccess.tsx'))
+const Contact = lazy(() => import('./pages/Contact.tsx'))
+const NotFound = lazy(() => import('./pages/NotFound.tsx'))
+const CartTest = lazy(() => import('./pages/CartTest.tsx'))
+
+// Admin Pages
+const AdminLogin = lazy(() => import('./pages/AdminLogin.tsx'))
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard.tsx'))
+const AdminProducts = lazy(() => import('./pages/AdminProducts.tsx'))
+const AdminOrders = lazy(() => import('./pages/AdminOrders.tsx'))
+
+
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center h-screen">
+    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary-600"></div>
+  </div>
+)
+
+function App() {
+  return (
+    <ErrorBoundary>
+      <HelmetProvider>
+        <CartProvider>
+          <Router>
+            <Routes>
+              {/* Admin Routes */}
+              <Route path="/admin/login" element={
+                <Suspense fallback={<LoadingSpinner />}>
+                  <AdminLogin />
+                </Suspense>
+              } />
+              <Route path="/admin/dashboard" element={
+                <Suspense fallback={<LoadingSpinner />}>
+                  <AdminDashboard />
+                </Suspense>
+              } />
+              <Route path="/admin/products" element={
+                <Suspense fallback={<LoadingSpinner />}>
+                  <AdminProducts />
+                </Suspense>
+              } />
+              <Route path="/admin/orders" element={
+                <Suspense fallback={<LoadingSpinner />}>
+                  <AdminOrders />
+                </Suspense>
+              } />
+              <Route path="/admin" element={
+                <Suspense fallback={<LoadingSpinner />}>
+                  <AdminLogin />
+                </Suspense>
+              } />
+
+              {/* Public Routes */}
+              <Route path="/*" element={
+                <div className="flex flex-col min-h-screen">
+                  <Header />
+                  <main className="flex-grow">
+                    <ErrorBoundary>
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Routes>
+                          <Route path="/" element={<Home />} />
+                          <Route path="/flowers" element={<FlowersGallery />} />
+                          <Route path="/average-products" element={<AverageProducts />} />
+                          <Route path="/premium-products" element={<PremiumProducts />} />
+                          <Route path="/checkout" element={<Checkout />} />
+                          <Route path="/checkout-success" element={<CheckoutSuccess />} />
+                          <Route path="/contact" element={<Contact />} />
+                          <Route path="/cart-test" element={<CartTest />} />
+                          <Route path="*" element={<NotFound />} />
+                        </Routes>
+                      </Suspense>
+                    </ErrorBoundary>
+                  </main>
+                  <Footer />
+                  <CartDropdown />
+                </div>
+              } />
+            </Routes>
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              className="mt-16"
+              toastClassName="bg-white border border-gray-200 shadow-lg rounded-lg"
+            />
+          </Router>
+        </CartProvider>
+      </HelmetProvider>
+    </ErrorBoundary>
+  )
+}
+
+export default App
